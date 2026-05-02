@@ -6,7 +6,7 @@ Portable zsh environment for consistent configuration across macOS and Linux mac
 
 - **Starship** prompt — cross-shell, fast, configured via `starship.toml`
 - **fzf** — fuzzy history search (`Ctrl+R`), file search (`Ctrl+T`), directory jump (`Alt+C`)
-- **fzf-tab** — fuzzy-filterable completion menu on `Tab`
+- **ripgrep** — `grep` aliased to `rg --color=auto --smart-case`
 - **zsh-autosuggestions** — ghost-text command suggestions from history
 - **zsh-syntax-highlighting** — real-time command coloring
 - **zoxide** — smart directory jumping (`z` and `j` aliases)
@@ -59,7 +59,6 @@ All plugins are cloned to `~/.local/share/zsh/`:
 |---|---|
 | zsh-autosuggestions | Ghost-text history suggestions |
 | zsh-syntax-highlighting | Command coloring |
-| fzf-tab | Fuzzy Tab completion |
 
 ## Updating
 
@@ -76,7 +75,6 @@ bash ~/Repositories/nikky-cmd/install.sh
 | `Ctrl+R` | Fuzzy history search (fzf) |
 | `Ctrl+T` | Fuzzy file search (fzf) |
 | `Alt+C` | Fuzzy directory jump (fzf) |
-| `Tab` | Fuzzy-filter completion candidates (fzf-tab) |
 
 ## Aliases
 

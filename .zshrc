@@ -33,10 +33,7 @@ if [[ -f "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 fi
 
-# fzf-tab (must be loaded before syntax-highlighting but after compinit)
-if [[ -f "$ZSH_PLUGINS_DIR/fzf-tab/fzf-tab.zsh" ]]; then
-  source "$ZSH_PLUGINS_DIR/fzf-tab/fzf-tab.zsh"
-fi
+
 
 # zsh-syntax-highlighting — MUST be last
 if [[ -f "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
@@ -45,24 +42,33 @@ fi
 
 # =============================================================================
 # fzf keybindings
-# =============================================================================
 # Only load if fzf is installed (via package manager or otherwise)
 if (( $+commands[fzf] )); then
   # Use fzf's official shell integration if available
   if [[ -f "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ]]; then
     source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+  elif [[ -f "/usr/local/opt/fzf/shell/key-bindings.zsh" ]]; then
+    source "/usr/local/opt/fzf/shell/key-bindings.zsh"
   elif [[ -f "/usr/share/fzf/key-bindings.zsh" ]]; then
     source "/usr/share/fzf/key-bindings.zsh"
+  elif [[ -f "/usr/share/doc/fzf/examples/key-bindings.zsh" ]]; then
+    source "/usr/share/doc/fzf/examples/key-bindings.zsh"
   else
-    # Minimal fallback: just bind Ctrl+R
-    zle -N fzf-history-widget 2>/dev/null || bindkey '^R' fzf-history-widget 2>/dev/null
+    # Minimal fallback: define widget and bind Ctrl+R
+    fzf-history-widget() {
+      local selected
+      selected=$(fc -rl 1 | awk '{CMD=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", CMD); if (!seen[CMD]++) print CMD}' | fzf --query="$LBUFFER" --reverse)
+      if [[ -n "$selected" ]]; then
+        LBUFFER="$selected"
+      fi
+      zle redisplay
+    }
+    zle -N fzf-history-widget
+    bindkey '^R' fzf-history-widget
   fi
 fi
 
-# fzf-tab configuration
-zstyle ':fzf-tab:*' use-fzf-preview-widget yes
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+
 
 # =============================================================================
 # zoxide (directory jumping)
@@ -89,6 +95,11 @@ export LESS_TERMCAP_se=$'\E[0m'       # end standout-mode
 export LESS_TERMCAP_so=$'\E[1;33m'    # begin standout-mode (info box)
 export LESS_TERMCAP_ue=$'\E[0m'       # end underline
 export LESS_TERMCAP_us=$'\E[1;4;36m'  # begin underline
+
+# =============================================================================
+# Git
+# =============================================================================
+export GIT_EDITOR=vim
 
 # =============================================================================
 # Aliases
@@ -136,17 +147,22 @@ fi
 if (( $+commands[fd] )); then
   alias find='fd'
 fi
-alias ls='ls -G' 2>/dev/null || alias ls='ls --color=auto'
-alias grep='grep --color=auto'
+if (( $+commands[rg] )); then
+  alias grep='rg --color=auto --smart-case'
+fi
+if [[ "$(uname)" == "Darwin" ]]; then
+  alias ls='ls -G'
+else
+  alias ls='ls --color=auto'
+fi
 
 # =============================================================================
 # PATH additions
 # =============================================================================
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.opencode/bin:$PATH"
 
 # Homebrew-specific paths (macOS with Apple Silicon)
 if [[ "$(uname)" == "Darwin" ]] && [[ -d "/opt/homebrew" ]]; then
-  export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
   export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
   export PATH="/opt/homebrew/opt/mysql-client@8.4/bin:$PATH"
 fi
