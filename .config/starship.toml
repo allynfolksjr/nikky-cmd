@@ -1,0 +1,97 @@
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold blue)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
+error_symbol = "[➜](bold red)"
+
+[cmd_duration]
+show_milliseconds = true
+
+[git_status]
+stashed = ""
+
+[hostname]
+ssh_only = false
+
+[nodejs]
+disabled = true
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[status]
+disabled = false
+
+[sudo]
+disabled = false
+symbol = "🧙 "
+
+
+[aws]
+symbol = "  "
+
+[conda]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[directory]
+read_only = " "
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[memory_usage]
+symbol = " "
+
+[nim]
+symbol = " "
+
+[nix_shell]
+symbol = " "
+
+[package]
+symbol = " "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rust]
+symbol = " "
+
+[scala]
+symbol = " "
+
+[shlvl]
+symbol = " "
+
+[swift]
+symbol = "ﯣ "
+
